@@ -1,6 +1,28 @@
 ---
 
-- name: Ensure tmux is installed
+- name: Install baseline packages
   ansible.builtin.dnf:
-    name: tmux
+    name: 
+      - vim
+      - tmux
+      - curl
+      - wget
+      - git
+      - rsync
+      - bind-utils
+      - chrony
+      - firewalld
+      - policycoreutils-python-utils  
     state: present
+
+- name: Ensure chronyd is enabled and running
+  ansible.builtin.service:
+    name: chronyd
+    state: started
+    enabled: true
+
+- name: Ensure firewalld is enabled and running
+  ansible.builtin.service:
+    name: firewalld
+    state: started
+    enabled: true
