@@ -1,0 +1,21 @@
+# Ansible secrets
+*.vault
+vault.yml
+.vault_pass
+
+# SSH keys
+*.pem
+*.key
+id_rsa
+id_ed25519
+
+# Ansible temporary/retry files
+*.retry
+
+# Editor files
+*.swp
+*.swo
+*~
+
+# OS junk
+.DS_Store
