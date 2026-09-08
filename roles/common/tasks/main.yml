@@ -26,3 +26,16 @@
     name: firewalld
     state: started
     enabled: true
+
+- name: Set system timezone
+  ansible.builtin.command:
+    cmd: timedatectl set-timezone America/Chicago
+  changed_when: false
+
+- name: Configure system MOTD
+  ansible.builtin.template:
+    src: motd.j2
+    dest: /etc/motd
+    owner: root
+    group: root
+    mode: '0644'
