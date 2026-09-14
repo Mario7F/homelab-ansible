@@ -1,0 +1,45 @@
+---
+
+- name: Obtain Kerberos ticket for FreeIPA admin
+  ansible.builtin.command:
+    cmd: kinit admin
+    stdin: "{{ ipa_admin_password }}"
+  no_log: true
+  changed_when: false
+
+- name: Ensure FreeIPA groups exist
+  ansible.builtin.command:
+    cmd: >
+      ipa group-add {{ item.name }}
+      --desc="{{ item.description }}"
+  loop: "{{ ipa_groups }}"
+  register: ipa_group_create
+  failed_when:
+    - ipa_group_create.rc != 0
+    - "'already exists' not in ipa_group_create.stderr"
+  changed_when: ipa_group_create.rc == 0
+
+- name: Ensure FreeIPA users exist
+  ansible.builtin.command:
+    cmd: >
+      ipa user-add {{ item.username }}
+      --first={{ item.first }}
+      --last={{ item.last }}
+  loop: "{{ ipa_users }}"
+  register: ipa_user_create
+  failed_when:
+    - ipa_user_create.rc != 0
+    - "'already exists' not in ipa_user_create.stderr"
+  changed_when: ipa_user_create.rc == 0
+
+- name: Ensure users are members of FreeIPA groups
+  ansible.builtin.command:
+    cmd: >
+      ipa group-add-member {{ item.1 }}
+      --users={{ item.0.username }}
+  loop: "{{ ipa_users | subelements('groups') }}"
+  register: ipa_group_membership
+  failed_when:
+    - ipa_group_membership.rc != 0
+    - "'already a member' not in ipa_group_membership.stdout"
+  changed_when: "'Added user' in ipa_group_membership.stdout"

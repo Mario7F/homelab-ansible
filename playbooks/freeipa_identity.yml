@@ -1,0 +1,9 @@
+---
+
+- name: Manage FreeIPA identities
+  hosts: ipa
+  become: true
+  gather_facts: false
+
+  roles:
+    - freeipa_identity

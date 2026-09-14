@@ -1,0 +1,12 @@
+
+
+ipa_groups:
+  - name: linux-admins
+    description: Linux administrators
+
+ipa_users:
+  - username: labuser01
+    first: lab
+    last: User
+    groups:
+      - linux-admins
