@@ -1,0 +1,46 @@
+---
+
+- name: Validate FreeIPA hostname
+  ansible.builtin.assert:
+    that:
+      - ansible_fqdn == ipa_hostname
+    fail_msg: "Host FQDN does not match the configured FreeIPA hostname."
+    success_msg: "FreeIPA hostname validation passed."
+
+
+- name: Validate FreeIPA domain
+  ansible.builtin.assert:
+    that:
+      - ipa_hostname.endswith(ipa_domain)
+    fail_msg: "FreeIPA hostname does not belong to the configured IPA domain."
+    success_msg: "FreeIPA domain validation passed."
+
+
+- name: Install FreeIPA server packages
+  ansible.builtin.dnf:
+    name:
+      - ipa-server
+      - ipa-server-dns
+    state: present
+
+- name: Ensure firewalld is enabled and running
+  ansible.builtin.service:
+    name: firewalld
+    state: started
+    enabled: true
+
+- name: Install and configure FreeIPA server
+  ansible.builtin.command:
+    cmd: >
+      ipa-server-install
+      --unattended
+      --hostname={{ ipa_hostname }}
+      --domain={{ ipa_domain }}
+      --realm={{ ipa_realm }}
+      --ds-password={{ ipa_directory_manager_password }}
+      --admin-password={{ ipa_directory_manager_password }}
+      --setup-dns
+      --forwarder={{ ipa_dns_forwarder }}
+    creates: /etc/ipa/default.conf
+      # no_log: true
+  

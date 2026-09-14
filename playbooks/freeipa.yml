@@ -1,0 +1,10 @@
+---
+
+- name: Configure FreeIPA servers
+  hosts: ipa
+  become: true
+  gather_facts: true
+
+
+  roles:
+    - freeipa_server

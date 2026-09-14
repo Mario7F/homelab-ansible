@@ -1,0 +1,7 @@
+---
+
+ipa_hostname: ipa01.lab.local
+ipa_domain: lab.local
+ipa_realm: LAB.LOCAL
+ipa_setup_dns: true
+ipa_dns_forwarder: 69.1.56.32
