@@ -1,5 +1,5 @@
 ## What is Hammer?
 
-### Hammer is the command-line interface for Foreman and Katello.
+####  -Hammer is the command-line interface for Foreman and Katello.
 
-### Instead of doing everything in the web GUI, Hammer communicates with the Foreman API.
+#### - Instead of doing everything in the web GUI, Hammer communicates with the Foreman API.
